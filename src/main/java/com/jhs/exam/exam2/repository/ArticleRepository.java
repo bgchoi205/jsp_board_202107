@@ -45,6 +45,14 @@ public class ArticleRepository {
 		
 		return MysqlUtil.selectRow(sql, Article.class);
 	}
+	
+	public int getArticlesCounts() {
+		SecSql sql = new SecSql();
+		sql.append("SELECT COUNT(*)");
+		sql.append("FROM article");
+		
+		return MysqlUtil.selectRowIntValue(sql);
+	}
 
 	public int delete(int id) {
 		SecSql sql = new SecSql();
@@ -70,5 +78,10 @@ public class ArticleRepository {
 		sql.append("WHERE id = ?", id);
 		
 		return MysqlUtil.update(sql);
+	}
+
+	public int getArticlesCount() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

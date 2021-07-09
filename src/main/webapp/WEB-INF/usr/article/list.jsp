@@ -15,6 +15,12 @@
 				</a>
 				<span>게시물 리스트</span>
 			</div>
+			<div class="py-1">
+				<div class="badge badge-primary">
+					해당 게시물 수 : 
+				</div>
+			</div>
+			<hr>
 
 			<div class="px-4">
 				<c:forEach items="${articles}" var="article">

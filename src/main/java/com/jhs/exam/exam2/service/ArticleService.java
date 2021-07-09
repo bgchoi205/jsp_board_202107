@@ -21,6 +21,11 @@ public class ArticleService {
 	public List<Article> getForPrintArticles() {
 		return articleRepository.getForPrintArticles();
 	}
+	
+	public int getArticlesCount() {
+		
+		return articleRepository.getArticlesCount();
+	}
 
 	public Article getForPrintArticleById(Member member, int id) {
 		Article article = articleRepository.getForPrintArticleById(id);
@@ -75,5 +80,7 @@ public class ArticleService {
 
 		return ResultData.from("S-1", "삭제가 가능합니다.");
 	}
+
+	
 
 }
