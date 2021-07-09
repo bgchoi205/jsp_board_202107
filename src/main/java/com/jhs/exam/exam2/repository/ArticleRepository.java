@@ -7,11 +7,13 @@ import com.jhs.mysqliutil.MysqlUtil;
 import com.jhs.mysqliutil.SecSql;
 
 public class ArticleRepository {
-	public int write(String title, String body) {
+	public int write(int boardId, int memberId, String title, String body) {
 		SecSql sql = new SecSql();
 		sql.append("INSERT INTO article");
 		sql.append("SET regDate = NOW()");
 		sql.append(", updateDate = NOW()");
+		sql.append(", boardId = ?", boardId);
+		sql.append(", memberId = ?", memberId);
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
 		
@@ -23,8 +25,11 @@ public class ArticleRepository {
 	public List<Article> getForPrintArticles() {
 		SecSql sql = new SecSql();
 		sql.append("SELECT A.*");
+		sql.append(", IFNULL(M.nickName, '삭제된회원') AS extra__writerName");
 		sql.append("FROM article AS A");
-		sql.append("ORDER BY id DESC");
+		sql.append("LEFT JOIN member M");
+		sql.append("ON A.memberId = M.id");
+		sql.append("ORDER BY A.id DESC");
 		
 		return MysqlUtil.selectRows(sql, Article.class);
 	}
@@ -32,8 +37,11 @@ public class ArticleRepository {
 	public Article getForPrintArticleById(int id) {
 		SecSql sql = new SecSql();
 		sql.append("SELECT A.*");
+		sql.append(", IFNULL(M.nickName, '삭제된회원') AS extra__writerName");
 		sql.append("FROM article AS A");
-		sql.append("WHERE id = ?", id);
+		sql.append("LEFT JOIN member M");
+		sql.append("ON A.memberId = M.id");
+		sql.append("WHERE A.id = ?", id);
 		
 		return MysqlUtil.selectRow(sql, Article.class);
 	}

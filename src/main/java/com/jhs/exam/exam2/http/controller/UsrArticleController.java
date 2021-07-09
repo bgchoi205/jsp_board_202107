@@ -51,13 +51,20 @@ public class UsrArticleController extends Controller {
 			return;
 		}
 
-		Article article = articleService.getForPrintArticleById(id);
-		
-		if ( article == null ) {
+		Article article = articleService.getForPrintArticleById(rq.getLoginedMember(), id);
+
+		if (article == null) {
 			rq.historyBack(Ut.f("%d번 게시물이 존재하지 않습니다.", id));
 			return;
 		}
-		
+
+		ResultData actorCanDeleteRd = articleService.actorCanDelete(rq.getLoginedMember(), article);
+
+		if (actorCanDeleteRd.isFail()) {
+			rq.historyBack(actorCanDeleteRd.getMsg());
+			return;
+		}
+
 		articleService.delete(id);
 
 		rq.replace(Ut.f("%d번 게시물을 삭제하였습니다.", id), redirectUri);
@@ -71,9 +78,9 @@ public class UsrArticleController extends Controller {
 			return;
 		}
 
-		Article article = articleService.getForPrintArticleById(id);
-		
-		if ( article == null ) {
+		Article article = articleService.getForPrintArticleById(rq.getLoginedMember(), id);
+
+		if (article == null) {
 			rq.historyBack(Ut.f("%d번 게시물이 존재하지 않습니다.", id));
 			return;
 		}
@@ -90,6 +97,8 @@ public class UsrArticleController extends Controller {
 	}
 
 	private void actionDoWrite(Rq rq) {
+		int boardId = 1; // 임시구현 //rq.getIntParam("boardId", 0);
+		int memberId = rq.getLoginedMemberId();
 		String title = rq.getParam("title", "");
 		String body = rq.getParam("body", "");
 		String redirectUri = rq.getParam("redirectUri", "../article/list");
@@ -104,7 +113,7 @@ public class UsrArticleController extends Controller {
 			return;
 		}
 
-		ResultData writeRd = articleService.write(title, body);
+		ResultData writeRd = articleService.write(boardId, memberId, title, body);
 		int id = (int) writeRd.getBody().get("id");
 
 		redirectUri = redirectUri.replace("[NEW_ID]", id + "");
@@ -115,13 +124,13 @@ public class UsrArticleController extends Controller {
 	private void actionShowWrite(Rq rq) {
 		rq.jsp("usr/article/write");
 	}
-	
+
 	private void actionDoModify(Rq rq) {
 		int id = rq.getIntParam("id", 0);
 		String title = rq.getParam("title", "");
 		String body = rq.getParam("body", "");
 		String redirectUri = rq.getParam("redirectUri", Ut.f("../article/detail?id=%d", id));
-		
+
 		if (id == 0) {
 			rq.historyBack("id를 입력해주세요.");
 			return;
@@ -134,6 +143,20 @@ public class UsrArticleController extends Controller {
 
 		if (body.length() == 0) {
 			rq.historyBack("body를 입력해주세요.");
+			return;
+		}
+
+		Article article = articleService.getForPrintArticleById(rq.getLoginedMember(), id);
+
+		if (article == null) {
+			rq.historyBack(Ut.f("%d번 게시물이 존재하지 않습니다.", id));
+			return;
+		}
+
+		ResultData actorCanModifyRd = articleService.actorCanModify(rq.getLoginedMember(), article);
+
+		if (actorCanModifyRd.isFail()) {
+			rq.historyBack(actorCanModifyRd.getMsg());
 			return;
 		}
 
@@ -150,9 +173,16 @@ public class UsrArticleController extends Controller {
 			return;
 		}
 
-		Article article = articleService.getForPrintArticleById(id);
-		
-		if ( article == null ) {
+		Article article = articleService.getForPrintArticleById(rq.getLoginedMember(), id);
+
+		ResultData actorCanModifyRd = articleService.actorCanModify(rq.getLoginedMember(), article);
+
+		if (actorCanModifyRd.isFail()) {
+			rq.historyBack(actorCanModifyRd.getMsg());
+			return;
+		}
+
+		if (article == null) {
 			rq.historyBack(Ut.f("%d번 게시물이 존재하지 않습니다.", id));
 			return;
 		}
