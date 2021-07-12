@@ -18,13 +18,13 @@ public class ArticleService {
 		return ResultData.from("S-1", Ut.f("%d번 게시물이 생성되었습니다.", id), "id", id);
 	}
 
-	public List<Article> getForPrintArticles() {
-		return articleRepository.getForPrintArticles();
+	public List<Article> getForPrintArticles(int startNumber, int pageCount, String searchKeywordTypeCode, String searchKeyword) {
+		return articleRepository.getForPrintArticles(startNumber, pageCount, searchKeywordTypeCode, searchKeyword);
 	}
 	
-	public int getArticlesCounts() {
+	public int getArticlesCounts(String searchKeywordTypeCode, String searchKeyword) {
 		
-		return articleRepository.getArticlesCounts();
+		return articleRepository.getArticlesCounts(searchKeywordTypeCode, searchKeyword);
 	}
 
 	public Article getForPrintArticleById(Member member, int id) {
