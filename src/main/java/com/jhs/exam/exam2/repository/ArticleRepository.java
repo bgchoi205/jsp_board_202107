@@ -80,8 +80,5 @@ public class ArticleRepository {
 		return MysqlUtil.update(sql);
 	}
 
-	public int getArticlesCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 }

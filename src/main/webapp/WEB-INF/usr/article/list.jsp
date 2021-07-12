@@ -17,7 +17,7 @@
 			</div>
 			<div class="py-1">
 				<div class="badge badge-primary">
-					해당 게시물 수 : 
+					해당 게시물 수 : ${articlesCount}
 				</div>
 			</div>
 			<hr>

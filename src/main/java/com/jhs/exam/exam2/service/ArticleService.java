@@ -22,9 +22,9 @@ public class ArticleService {
 		return articleRepository.getForPrintArticles();
 	}
 	
-	public int getArticlesCount() {
+	public int getArticlesCounts() {
 		
-		return articleRepository.getArticlesCount();
+		return articleRepository.getArticlesCounts();
 	}
 
 	public Article getForPrintArticleById(Member member, int id) {
